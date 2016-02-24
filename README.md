@@ -17,12 +17,8 @@
           if($bWaitFlag)  //是否等待 进程执行完在进行下一次循环
             {
                 if(isset($pids[$i])){
-                     //pcntl_waitpid($pids[$i], $status,WUNTRACED);//查看子进程是否执行完如果没执行完 等待
+                     pcntl_waitpid($pids[$i], $status,WUNTRACED);//查看子进程是否执行完如果没执行完 等待
                      //或者写shell命令查看pid进程是否存在 如果存在直接 continue 不存在继续向下执行
-                     exec("ps ax | grep 'fock' |  awk '{ print $1 }'",$res);
-                     print_r($res);
-                     if(in_array($pids[$i],$res)) continue;
-                     //print_r($res);
                  }
             }
            $pids[$i] = pcntl_fork();// 产生子进程，而且从当前行之下开试运行代码，而且不继承父进程的数据信息
