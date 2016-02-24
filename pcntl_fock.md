@@ -4,6 +4,7 @@
 * 对子进程来说，fork返回给它0,但它的pid绝对不会是0；之所以fork返回0给它，是因为它随时可以调用getpid()来获取自己的pid，而对于父进程来说返回为子进程进程id；
 * fork之后，操作系统会复制一个与父进程完全相同的子进程，虽说是父子关系，但是在操作系统看来，他们更像兄弟关系，这2个进程共享代码空间，但是数据空间是互相独立的之间不会相互影响；
 * pcntl函数还有一些功能没实验,例如进程状态，根据相应状态进行一些处理，运用多进程可以增加处理数据的效率；
+*  pcntl_waitpid()等待或返回fork的子进程状态,当第三个参数为WUNTRACED表示等待当第三个参数为WNOHANG返回当前进程状态，返回值0代表进程正在运行中 >0当前进程号代表进程已经退出， 如果是-1代表出错
  
  ```php
 <?php
@@ -17,8 +18,12 @@
           if($bWaitFlag)  //是否等待 进程执行完在进行下一次循环
             {
                 if(isset($pids[$i])){
-                     pcntl_waitpid($pids[$i], $status,WUNTRACED);//查看子进程是否执行完如果没执行完 等待
-                     //或者写shell命令查看pid进程是否存在 如果存在直接 continue 不存在继续向下执行
+                     //pcntl_waitpid($pids[$i], $status,WUNTRACED);//查看子进程是否执行完如果没执行完 等待
+                     //或者检查子进程状态 如果运行中直接跳过
+                     $re=pcntl_waitpid($pids[$i],$status,WNOHANG);
+                     if($re!=$pids[$i]){
+                      continue;
+                     }
                  }
             }
            $pids[$i] = pcntl_fork();// 产生子进程，而且从当前行之下开试运行代码，而且不继承父进程的数据信息
