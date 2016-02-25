@@ -6,7 +6,7 @@
 <?php
 function shutdown()
 {
-    echo PHP_EOL.'shutdownaa'.PHP_EOL;
+    echo PHP_EOL.'shutdown'.PHP_EOL;
 }
 
 register_shutdown_function('shutdown');
@@ -44,8 +44,8 @@ pcntl_signal(SIGTERM, "sig_handler");
 pcntl_signal(SIGHUP,  "sig_handler");
 pcntl_signal(SIGINT,  "sig_handler");
 while(true){
-    echo posix_getpid();
-    sleep(1);
+    //echo posix_getpid();
+    sleep(10);//也是一次注册操作如果有信号会立刻返回
     // do something
     //信号处理
     pcntl_signal_dispatch(); // 接收到信号时，调用注册的signalHandler()比declare效率更高 php5.3版本以上支持
