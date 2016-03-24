@@ -60,6 +60,8 @@ if (!$fp) {
    ```
    
    启动服务 /home/service/php/bin/php server.php &
+   
    测试服务/home/service/php/bin/php client.php
+   
    或者 telnet 127.0.0.1 6666  测试服务
    
