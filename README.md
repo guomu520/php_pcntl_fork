@@ -1,6 +1,8 @@
 # php socket
 简单的socket小实例
-
+server 代码
+server.php
+ ```php
 <?php
 /*
 小实例  socket 服务  主进程负责监控  子 多进程处理请求 支持自动平滑重启
@@ -40,3 +42,24 @@ while(1){
         }
    }
 }
+ ```
+ client端代码
+ client.php
+  ```php
+  <?php
+ini_set('display_errors', 1);
+error_reporting(E_WARNING | E_ERROR | E_ALL);
+$fp = stream_socket_client("tcp://127.0.0.1:6666", $errno, $errstr);
+if (!$fp) {
+    echo "ERROR: $errno - $errstr<br />\n";
+} else {
+    fwrite($fp, "php");
+     echo fread($fp,1024);
+    fclose($fp);
+}
+   ```
+   
+   启动服务 /home/service/php/bin/php server.php &
+   测试服务/home/service/php/bin/php client.php
+   或者 telnet 127.0.0.1 6666  测试服务
+   
